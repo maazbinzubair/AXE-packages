@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products – AXE Packages</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    /* ===== RESET & VARIABLES (consistent with index.html) ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #141414;
+      --dark2: #1c1c1c;
+      --white: #f5f5f5;
+      --white2: #e0e0e0;
+      --red: #cc0000;
+      --red-bright: #ff1a1a;
+      --red-dark: #880000;
+      --grey: #555;
+      --grey-light: #888;
+      --border: rgba(255,255,255,0.08);
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --font-cond: 'Barlow Condensed', sans-serif;
+      --nav-h: 80px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+    /* ===== NAVBAR (FIXED) - MATCHES index.html ===== */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--nav-h);
+      background: #ffffff;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: box-shadow 0.3s;
+    }
+    #navbar.scrolled { 
+      box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+    }
+
+    .nav-inner {
+      max-width: 1400px; margin: 0 auto; padding: 0 32px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo { display: flex; align-items: center; }
+    .logo-img {
+      height: 60px;
+      width: auto;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    @media (max-width: 768px) {
+      .logo-img { height: 48px; }
+    }
+
+    /* desktop navigation */
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: var(--font-cond);
+      font-size: 15px;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 18px;
+      right: 18px;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-links a.active { color: var(--red); }
+    .nav-links a.active::after,
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ===== HAMBURGER (identical to index.html) ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 28px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #000000;
+      border-radius: 2px;
+      transition: all 0.25s ease-in-out;
+    }
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+
+    /* ===== MOBILE MENU STYLES (exactly as index.html) ===== */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+      .nav-links {
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        box-shadow: none;
+        border-top: none;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        border-bottom: none;
+      }
+      .nav-links.open {
+        max-height: 460px;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+        border-bottom: 3px solid var(--red);
+      }
+      .nav-links a {
+        width: 100%;
+        padding: 16px 28px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #000000;
+        border-bottom: 1px solid #f0f0f0;
+        background: transparent;
+      }
+      .nav-links a::after {
+        display: none;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: rgba(204,0,0,0.05);
+        color: var(--red);
+      }
+      body.menu-open {
+        overflow: hidden;
+      }
+    }
+
+    /* ===== PAGE BANNER ===== */
+    .page-banner {
+      padding-top: calc(var(--nav-h) + 60px);
+      padding-bottom: 60px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+    .banner-noise {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDYiLz48L3N2Zz4=');
+      pointer-events: none;
+      opacity: 0.3;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px;
+      width: 100%;
+    }
+    .section-tag {
+      display: inline-block;
+      font-family: var(--font-cond);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--grey-light);
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 2px;
+      margin-bottom: 16px;
+    }
+    .section-tag.red {
+      border-bottom-color: var(--red);
+      color: var(--red);
+    }
+    .page-banner-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 80px);
+      line-height: 1;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .page-banner p {
+      font-size: 18px;
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ===== FILTER TABS ===== */
+    .products-section {
+      padding: 80px 0;
+    }
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid #ddd;
+      padding: 8px 24px;
+      font-family: var(--font-cond);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 30px;
+    }
+    .filter-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: white;
+    }
+    .filter-btn:hover:not(.active) {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* ===== PRODUCT CATALOG GRID ===== */
+    .products-catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    }
+    .catalog-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .catalog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
+    }
+    .catalog-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-img-box {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s;
+    }
+    .catalog-card:hover .cat-img-box {
+      transform: scale(1.03);
+    }
+    .cat-icon {
+      font-size: 64px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    }
+    .catalog-body {
+      padding: 24px;
+    }
+    .cat-tag {
+      display: inline-block;
+      font-family: var(--font-cond);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #f0f0f0;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      color: var(--red);
+    }
+    .catalog-body h3 {
+      font-family: var(--font-cond);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #111;
+    }
+    .catalog-body p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn-outline.sm {
+      display: inline-block;
+      background: transparent;
+      border: 1.5px solid var(--red);
+      color: var(--red);
+      font-family: var(--font-cond);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 30px;
+      transition: all 0.2s;
+    }
+    .btn-outline.sm:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    /* ===== CTA STRIP ===== */
+    .cta-strip {
+      background: var(--red);
+      padding: 70px 32px;
+      text-align: center;
+    }
+    .cta-strip h2 {
+      font-family: var(--font-display);
+      font-size: 44px;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .cta-strip p {
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 24px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: white;
+      color: var(--red);
+      font-family: var(--font-cond);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .btn-primary:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+    }
+
+    /* ===== FOOTER (matches index.html) ===== */
+    .site-footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 70px 0 0;
+    }
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-brand {
+      flex: 2;
+      min-width: 200px;
+    }
+    .footer-col {
+      flex: 1;
+      min-width: 180px;
+    }
+    .footer-col h4 {
+      font-family: var(--font-cond);
+      font-size: 18px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    .footer-col ul li {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    .footer-col ul li a:hover {
+      color: var(--red);
+    }
+    .footer-bottom {
+      padding: 20px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    .footer-bottom p {
+      font-size: 13px;
+      color: var(--grey);
+    }
+    @media (max-width: 768px) {
+      .footer-grid {
+        flex-direction: column;
+        gap: 32px;
+      }
+      .container {
+        padding: 0 20px;
+      }
+      .cta-strip h2 {
+        font-size: 32px;
+      }
+      .products-catalog {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== WHATSAPP BUTTON (EXACTLY MATCHING INDEX.HTML) ===== */
+    .whatsapp-button {
+      position: fixed;
+      width: 70px;
+      height: 70px;
+      bottom: 40px;
+      right: 40px;
+      background-color: #25D366;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 34px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .whatsapp-button:hover {
+      transform: scale(1.1) translateY(-5px);
+      background-color: #128C7E;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    @media (max-width: 768px) {
+      .whatsapp-button {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+        bottom: 30px;
+        right: 30px;
+      }
+    }
+    @media (max-width: 576px) {
+      .whatsapp-button {
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
+        bottom: 25px;
+        right: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img src="https://i.ibb.co/jv7TtTLv/images-removebg-preview.png" alt="AXE Packages Logo" class="logo-img">
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html" class="active">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="clients.html">Clients</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="page-banner">
+  <div class="banner-noise"></div>
+  <div class="container">
+    <div class="section-tag red">What We Make</div>
+    <h1 class="page-banner-title">Our Products</h1>
+    <p>Industrial-grade packaging solutions for every sector of Pakistan's economy.</p>
+  </div>
+</section>
+
+<!-- FILTER TABS -->
+<section class="products-section section-pad">
+  <div class="container">
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-filter="all">All Products</button>
+      <button class="filter-btn" data-filter="corrugated">Corrugated</button>
+      <button class="filter-btn" data-filter="food">Food</button>
+      <button class="filter-btn" data-filter="pharma">Pharma</button>
+      <button class="filter-btn" data-filter="textile">Textile</button>
+    </div>
+
+    <div class="products-catalog" id="productsCatalog">
+      <div class="catalog-card" data-cat="corrugated">
+        <div class="catalog-img-wrap">
+          <div class="cat-img-box" style="background: linear-gradient(135deg,#1a1a1a 60%,#cc0000 100%)">
+            <div class="cat-icon">📦</div>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <span class="cat-tag">Corrugated</span>
+          <h3>Single-Wall Corrugated Box</h3>
+          <p>Lightweight, cost-effective solution for e-commerce and FMCG distribution across Pakistan.</p>
+          <a href="contact.html" class="btn-outline sm">Get Quote</a>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-cat="corrugated">
+        <div class="catalog-img-wrap">
+          <div class="cat-img-box" style="background: linear-gradient(135deg,#111 60%,#880000 100%)">
+            <div class="cat-icon">🗃️</div>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <span class="cat-tag">Corrugated</span>
+          <h3>Double-Wall Heavy Duty Box</h3>
+          <p>For machinery, appliances, and industrial exports requiring superior protection.</p>
+          <a href="contact.html" class="btn-outline sm">Get Quote</a>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-cat="food">
+        <div class="catalog-img-wrap">
+          <div class="cat-img-box" style="background: linear-gradient(135deg,#1a0000 60%,#ff2200 100%)">
+            <div class="cat-icon">🍱</div>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <span class="cat-tag">Food</span>
+          <h3>Food Grade Carton Box</h3>
+          <p>FDA & PSQCA compliant cartons for biscuits, cereal, tea, and dry food packaging.</p>
+          <a href="contact.html" class="btn-outline sm">Get Quote</a>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-cat="food">
+        <div class="catalog-img-wrap">
+          <div class="cat-img-box" style="background: linear-gradient(135deg,#200000 60%,#cc3300 100%)">
+            <div class="cat-icon">🥡</div>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <span class="cat-tag">Food</span>
+          <h3>Kraft Paper Bags</h3>
+          <p>For bakeries, restaurants, and takeaway chains. Brown and white kraft available.</p>
+          <a href="contact.html" class="btn-outline sm">Get Quote</a>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-cat="pharma">
+        <div class="catalog-img-wrap">
+          <div class="cat-img-box" style="background: linear-gradient(135deg,#0a0a0a 60%,#b30000 100%)">
+            <div class="cat-icon">💊</div>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <span class="cat-tag">Pharma</span>
+          <h3>Medicine Carton & Leaflet Box</h3>
+          <p>Tamper-evident pharma cartons with barcode, batch number, and serialization.</p>
+          <a href="contact.html" class="btn-outline sm">Get Quote</a>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-cat="textile">
+        <div class="catalog-img-wrap">
+          <div class="cat-img-box" style="background: linear-gradient(135deg,#111 60%,#aa0000 100%)">
+            <div class="cat-icon">🛍️</div>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <span class="cat-tag">Textile</span>
+          <h3>Rigid Gift Boxes</h3>
+          <p>Premium rigid boxes for fashion brands, stitched clothing lines, and luxury retail.</p>
+          <a href="contact.html" class="btn-outline sm">Get Quote</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip">
+  <div class="container">
+    <h2>Need a custom packaging solution?</h2>
+    <p>Our design team is ready to build exactly what your brand needs.</p>
+    <a href="contact.html" class="btn-primary">Contact Our Team</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+            <img src="https://i.ibb.co/n8bft8p5/IMG-8127.png" alt="AXE Packages Footer Logo" border="0" class="logo-img">
+        </div>
+        <p>Pakistan's premier packaging manufacturer since 2008. Quality. Precision. Trust.</p>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="about.html">About Us</a></li><li><a href="clients.html">Clients</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li>Javed Nagar 16 KM. Lahore Sheikhupura Road Lahore, Pakistan</li><li>+92-324-5555-277</li><li>info@axepackages.com.pk</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 AXE Packages. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<!-- UPDATED WHATSAPP BUTTON - IDENTICAL TO INDEX.HTML -->
+<a href="https://wa.me/923245555277" class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Font Awesome for WhatsApp icon (same as index.html) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script>
+  (function() {
+    // ===== NAVBAR SCROLL EFFECT =====
+    const navbar = document.getElementById('navbar');
+    if (navbar) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+      });
+    }
+
+    // ===== HAMBURGER MENU TOGGLE (identical to index.html) =====
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const body = document.body;
+
+    if (hamburger && navLinks) {
+      const toggleMenu = (e) => {
+        if (e) e.stopPropagation();
+        hamburger.classList.toggle('open');
+        navLinks.classList.toggle('open');
+        body.classList.toggle('menu-open');
+      };
+      hamburger.addEventListener('click', toggleMenu);
+      const allLinks = navLinks.querySelectorAll('a');
+      allLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+          body.classList.remove('menu-open');
+        });
+      });
+      document.addEventListener('click', (event) => {
+        const isClickInsideNav = navLinks.contains(event.target);
+        const isClickOnHamburger = hamburger.contains(event.target);
+        if (navLinks.classList.contains('open') && !isClickInsideNav && !isClickOnHamburger) {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+          body.classList.remove('menu-open');
+        }
+      });
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+          body.classList.remove('menu-open');
+        }
+      });
+    }
+
+    // ===== FILTER TABS FUNCTIONALITY =====
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const catalogCards = document.querySelectorAll('.catalog-card');
+    
+    if (filterBtns.length && catalogCards.length) {
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Update active button state
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          const filterValue = btn.getAttribute('data-filter');
+          
+          // Filter cards with smooth transition
+          catalogCards.forEach(card => {
+            if (filterValue === 'all' || card.getAttribute('data-cat') === filterValue) {
+              card.style.display = 'block';
+              // add a little fade-in effect
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(10px)';
+              setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+              }, 10);
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    // ===== REVEAL ANIMATION ON SCROLL =====
+    const revealElements = document.querySelectorAll('.catalog-card, .filter-btn');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    revealElements.forEach(el => {
+      if (el.classList && el.classList.contains('filter-btn')) {
+        // skip heavy animation for buttons, just ensure visible
+        el.style.opacity = '1';
+        return;
+      }
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      observer.observe(el);
+    });
+    
+    // Ensure catalog cards are visible initially after filter layout
+    setTimeout(() => {
+      catalogCards.forEach(card => {
+        if (card.style.display !== 'none') {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }
+      });
+    }, 100);
+  })();
+</script>
+</body>
+</html>

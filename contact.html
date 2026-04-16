@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Contact – AXE Packages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ===== RESET & VARIABLES ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #141414;
+      --dark2: #1c1c1c;
+      --white: #f5f5f5;
+      --white2: #e0e0e0;
+      --red: #cc0000;
+      --red-bright: #ff1a1a;
+      --red-dark: #880000;
+      --grey: #555;
+      --grey-light: #888;
+      --border: rgba(255,255,255,0.08);
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --font-cond: 'Barlow Condensed', sans-serif;
+      --nav-h: 80px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+    /* ===== NAVBAR ===== */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--nav-h);
+      background: #ffffff;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: box-shadow 0.3s;
+    }
+    #navbar.scrolled { 
+      box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+    }
+
+    .nav-inner {
+      max-width: 1400px; margin: 0 auto; padding: 0 32px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo { display: flex; align-items: center; }
+    .logo-img {
+      height: 60px;
+      width: auto;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    @media (max-width: 768px) {
+      .logo-img { height: 48px; }
+    }
+
+    /* desktop navigation */
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: var(--font-cond);
+      font-size: 15px;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 18px;
+      right: 18px;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-links a.active { color: var(--red); }
+    .nav-links a.active::after,
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ===== HAMBURGER ===== */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 28px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #000000;
+      border-radius: 2px;
+      transition: all 0.25s ease-in-out;
+    }
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(9px) rotate(45deg);
+    }
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-9px) rotate(-45deg);
+    }
+
+    /* ===== MOBILE MENU STYLES - EXACTLY LIKE products.html ===== */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+      .nav-links {
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 0;
+        transform: translateY(-110%);
+        opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        pointer-events: none;
+        border-bottom: 2px solid var(--red);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        z-index: 999;
+      }
+      .nav-links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .nav-links a {
+        width: 100%;
+        padding: 16px 28px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #000000;
+        border-bottom: 1px solid #f0f0f0;
+        background: transparent;
+      }
+      .nav-links a::after {
+        display: none;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: rgba(204,0,0,0.05);
+        color: var(--red);
+      }
+      body.menu-open {
+        overflow: hidden;
+      }
+    }
+
+    /* ===== PAGE BANNER ===== */
+    .page-banner {
+      background: var(--black);
+      padding: calc(var(--nav-h) + 60px) 0 70px;
+      position: relative;
+      text-align: center;
+    }
+    .section-tag.red {
+      display: inline-block;
+      font-family: var(--font-cond);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--red);
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 4px;
+      margin-bottom: 20px;
+    }
+    .page-banner-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 90px);
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .page-banner p {
+      color: var(--white2);
+      font-size: 18px;
+    }
+
+    /* ===== CONTACT SECTION ===== */
+    .section-pad { padding: 90px 0; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; width: 100%; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    .contact-form-wrap h2, .contact-info-wrap h2 {
+      font-family: var(--font-display);
+      font-size: 38px;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .form-sub {
+      color: var(--grey);
+      margin-bottom: 32px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-family: var(--font-cond);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      font-family: var(--font-body);
+      font-size: 15px;
+      transition: border 0.2s;
+      background: #fff;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--red);
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-family: var(--font-cond);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(204,0,0,0.3);
+    }
+    .btn-primary:hover { background: var(--red-bright); transform: translateY(-2px); }
+    .full-width { width: 100%; text-align: center; }
+
+    .info-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .info-card {
+      display: flex;
+      gap: 18px;
+      padding: 20px 24px;
+      background: #f8f8f8;
+      border-left: 3px solid var(--red);
+    }
+    .info-icon { font-size: 28px; color: var(--red); }
+    .info-card h4 { font-family: var(--font-cond); font-size: 18px; margin-bottom: 6px; }
+    .info-card p { color: var(--grey); font-size: 14px; }
+
+    .map-placeholder {
+      width: 100%;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .map-inner {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+    }
+    .map-inner iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* ===== CTA STRIP ===== */
+    .cta-strip {
+      background: var(--red);
+      padding: 70px 32px;
+      text-align: center;
+    }
+    .cta-strip h2 { font-family: var(--font-display); font-size: 44px; color: white; margin-bottom: 12px; }
+    .cta-strip p { color: rgba(255,255,255,0.9); margin-bottom: 24px; }
+
+    /* ===== FOOTER ===== */
+    .site-footer { background: var(--black); color: var(--white); padding: 70px 0 0; }
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-brand { flex: 2; min-width: 200px; }
+    .footer-col { flex: 1; min-width: 180px; }
+    .footer-col h4 { font-family: var(--font-cond); font-size: 18px; margin-bottom: 20px; }
+    .footer-col ul li, .footer-col ul a { font-size: 14px; color: var(--grey-light); line-height: 2; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--red); }
+    .footer-bottom { padding: 20px 0; text-align: center; border-top: 1px solid var(--border); margin-top: 20px; }
+    .footer-bottom p { font-size: 13px; color: var(--grey); }
+
+    /* ===== WHATSAPP BUTTON ===== */
+    .whatsapp-button {
+      position: fixed;
+      width: 70px;
+      height: 70px;
+      bottom: 40px;
+      right: 40px;
+      background-color: #25D366;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 34px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .whatsapp-button:hover {
+      transform: scale(1.1) translateY(-5px);
+      background-color: #128C7E;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    @media (max-width: 768px) {
+      .whatsapp-button {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+        bottom: 30px;
+        right: 30px;
+      }
+    }
+    @media (max-width: 576px) {
+      .whatsapp-button {
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
+        bottom: 25px;
+        right: 25px;
+      }
+    }
+
+    /* ===== FORM MESSAGES ===== */
+    .form-success, .form-error {
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .form-success { background: #e8f5e9; border-left: 4px solid #4caf50; color: #2e7d32; }
+    .form-error { background: #ffebee; border-left: 4px solid #cc0000; color: #c62828; }
+    .email-fallback {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 12px 16px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: #e65100;
+      border-radius: 4px;
+    }
+    .email-fallback a { color: #e65100; text-decoration: underline; }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    @media (max-width: 1024px) {
+      .contact-grid { gap: 48px; }
+    }
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .page-banner { padding: calc(var(--nav-h) + 40px) 0 50px; }
+      .section-pad { padding: 60px 0; }
+      .contact-form-wrap h2, .contact-info-wrap h2 { font-size: 32px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .cta-strip h2 { font-size: 32px; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0 20px; }
+      .info-card { flex-direction: column; gap: 8px; }
+      .btn-primary { padding: 12px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img src="https://i.ibb.co/jv7TtTLv/images-removebg-preview.png" alt="AXE Packages Logo" class="logo-img">
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="clients.html">Clients</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="page-banner">
+  <div class="container">
+    <div class="section-tag red">Reach Us</div>
+    <h1 class="page-banner-title">Contact AXE Packages</h1>
+    <p>We respond to every enquiry within 24 business hours.</p>
+  </div>
+</section>
+
+<section class="contact-section section-pad">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- CONTACT FORM -->
+      <div class="contact-form-wrap">
+        <h2>Send Us a Message</h2>
+        <p class="form-sub">Fill in the form below and our team will get back to you shortly.</p>
+
+        <div id="formSuccess" class="form-success" style="display:none;">
+          ✅ Your message has been sent successfully! We'll be in touch within 24 hours.
+        </div>
+        <div id="formError" class="form-error" style="display:none;">
+          ❌ Something went wrong. Please try again or call us directly at +92-324-5555-277.
+        </div>
+
+        <form id="contactForm" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="name" id="name" required />
+            </div>
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" name="company" id="company" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" id="email" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" name="phone" id="phone" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <select name="city" id="city">
+              <option value="">Select your city</option>
+              <option>Lahore</option>
+              <option>Karachi</option>
+              <option>Islamabad / Rawalpindi</option>
+              <option>Faisalabad</option>
+              <option>Multan</option>
+              <option>Peshawar</option>
+              <option>Quetta</option>
+              <option>Sialkot</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Product of Interest</label>
+            <select name="product" id="product">
+              <option value="">Select a product category</option>
+              <option>Corrugated Boxes</option>
+              <option>Food Packaging</option>
+              <option>Pharma Packaging</option>
+              <option>Textile / Garment Bags</option>
+              <option>Rigid / Gift Boxes</option>
+              <option>Eco / Biodegradable Packaging</option>
+              <option>Custom / Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea name="message" id="message" rows="5" placeholder="Describe your packaging requirement, estimated quantity, timeline..." required></textarea>
+          </div>
+          
+          <button type="submit" class="btn-primary full-width" id="submitBtn">
+            <span id="btnText">Send Message</span>
+            <span id="btnLoader" style="display:none;">Sending...</span>
+          </button>
+        </form>
+        
+        <div class="email-fallback">
+          <strong>📧 Prefer direct email?</strong> You can also reach us at <a href="mailto:info@axepackages.com.pk">info@axepackages.com.pk</a> or call <a href="tel:+923245555277">+92-324-5555-277</a>
+        </div>
+      </div>
+
+      <!-- CONTACT INFO + MAP -->
+      <div class="contact-info-wrap">
+        <h2>Get in Touch</h2>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-icon">📍</div>
+            <div>
+              <h4>Head Office – Lahore</h4>
+              <p>Javed Nagar 16 KM. Lahore Sheikhupura Road Lahore, Pakistan<br> Lahore, 57000, Pakistan</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📞</div>
+            <div>
+              <h4>Phone</h4>
+              <p>+92-324-5555-277</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">✉</div>
+            <div>
+              <h4>Email</h4>
+              <p>info@axepackages.com.pk</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">🕐</div>
+            <div>
+              <h4>Business Hours</h4>
+              <p>Monday – Saturday: 9:00 AM – 6:00 PM<br>Sunday: Closed</p>
+            </div>
+          </div>
+        </div>
+        <div class="map-placeholder">
+          <div class="map-inner">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3396.8145971611075!2d74.1841550748613!3d31.638926341276463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3918e11b9c9f2259%3A0x4289b9c16875431d!2sAXE%20Packages%20(PVT)%20LTD.!5e0!3m2!1sen!2s!4v1774373287738!5m2!1sen!2s" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="AXE Packages Location Map">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <div class="container">
+    <h2>Prefer a direct call?</h2>
+    <p>Call our sales team at +92-324-5555-277 — Mon to Sat, 9AM to 6PM.</p>
+    <a href="tel:+923245555277" class="btn-primary">Call Now</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <img src="https://i.ibb.co/n8bft8p5/IMG-8127.png" alt="AXE Packages Footer Logo" class="logo-img">
+        </div>
+        <p>Pakistan's premier packaging manufacturer since 2008. Quality. Precision. Trust.</p>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="about.html">About Us</a></li><li><a href="clients.html">Clients</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li>Javed Nagar 16 KM. Lahore Sheikhupura Road Lahore, Pakistan</li><li>+92-324-5555-277</li><li>info@axepackages.com.pk</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 AXE Packages. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/923245555277" class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+  (function() {
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    function updateNavbarShadow() {
+      if (window.scrollY > 20) navbar.classList.add('scrolled');
+      else navbar.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', updateNavbarShadow);
+    updateNavbarShadow();
+
+    // ===== HAMBURGER MENU TOGGLE - IDENTICAL TO products.html =====
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const body = document.body;
+
+    if (hamburger && navLinks) {
+      const toggleMenu = (e) => {
+        if (e) e.stopPropagation();
+        hamburger.classList.toggle('open');
+        navLinks.classList.toggle('open');
+        body.classList.toggle('menu-open');
+      };
+      hamburger.addEventListener('click', toggleMenu);
+      
+      // Close menu when a link is clicked
+      const allLinks = navLinks.querySelectorAll('a');
+      allLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+          body.classList.remove('menu-open');
+        });
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', (event) => {
+        const isClickInsideNav = navLinks.contains(event.target);
+        const isClickOnHamburger = hamburger.contains(event.target);
+        if (navLinks.classList.contains('open') && !isClickInsideNav && !isClickOnHamburger) {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+          body.classList.remove('menu-open');
+        }
+      });
+      
+      // Close menu on window resize if open and screen > 768
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+          hamburger.classList.remove('open');
+          navLinks.classList.remove('open');
+          body.classList.remove('menu-open');
+        }
+      });
+    }
+
+    // Form submission to backend
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnLoader = document.getElementById('btnLoader');
+    const formSuccessDiv = document.getElementById('formSuccess');
+    const formErrorDiv = document.getElementById('formError');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (formSuccessDiv) formSuccessDiv.style.display = 'none';
+        if (formErrorDiv) formErrorDiv.style.display = 'none';
+        
+        const name = document.getElementById('name').value.trim();
+        const company = document.getElementById('company').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const city = document.getElementById('city').value;
+        const product = document.getElementById('product').value;
+        const message = document.getElementById('message').value.trim();
+        
+        let isValid = true;
+        const inputs = ['name', 'email', 'phone', 'message'];
+        inputs.forEach(fieldId => {
+          const field = document.getElementById(fieldId);
+          if(field) field.style.borderColor = '#e0e0e0';
+        });
+        
+        if (!name) { isValid = false; document.getElementById('name').style.borderColor = '#cc0000'; }
+        const emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        if (!email || !emailPattern.test(email)) { isValid = false; document.getElementById('email').style.borderColor = '#cc0000'; }
+        if (!phone) { isValid = false; document.getElementById('phone').style.borderColor = '#cc0000'; }
+        if (!message) { isValid = false; document.getElementById('message').style.borderColor = '#cc0000'; }
+        
+        if (!isValid) {
+          if (formErrorDiv) {
+            formErrorDiv.style.display = 'block';
+            formErrorDiv.innerHTML = '❌ Please fill all required fields correctly.';
+          }
+          return;
+        }
+        
+        if (btnText && btnLoader) {
+          btnText.style.display = 'none';
+          btnLoader.style.display = 'inline-block';
+          submitBtn.disabled = true;
+          submitBtn.classList.add('loading');
+        }
+        
+        try {
+          const formData = { name, company: company || 'N/A', email, phone, city: city || 'N/A', product: product || 'N/A', message };
+          const response = await fetch('/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          const result = await response.json();
+          if (response.ok && result.success) {
+            if (formSuccessDiv) {
+              formSuccessDiv.style.display = 'block';
+              formSuccessDiv.innerHTML = '✅ ' + result.message;
+            }
+            contactForm.reset();
+            inputs.forEach(fieldId => {
+              const field = document.getElementById(fieldId);
+              if(field) field.style.borderColor = '#e0e0e0';
+            });
+            setTimeout(() => {
+              if (formSuccessDiv) {
+                formSuccessDiv.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => { formSuccessDiv.style.display = 'none'; formSuccessDiv.style.animation = ''; }, 300);
+              }
+            }, 5000);
+          } else {
+            throw new Error(result.error || 'Submission failed');
+          }
+        } catch (err) {
+          console.error('Form error:', err);
+          if (formErrorDiv) {
+            formErrorDiv.style.display = 'block';
+            formErrorDiv.innerHTML = '❌ ' + (err.message || 'Unable to send message. Please email us directly at info@axepackages.com.pk or call +92-324-5555-277');
+          }
+        } finally {
+          if (btnText && btnLoader) {
+            btnText.style.display = 'inline-block';
+            btnLoader.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+          }
+        }
+      });
+      
+      const allInputs = contactForm.querySelectorAll('input, select, textarea');
+      allInputs.forEach(field => {
+        field.addEventListener('focus', function() { this.style.borderColor = '#e0e0e0'; });
+      });
+    }
+    
+    // Add fadeOut keyframe if missing
+    if (!document.querySelector('#fadeOutStyle')) {
+      const style = document.createElement('style');
+      style.id = 'fadeOutStyle';
+      style.textContent = `@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }`;
+      document.head.appendChild(style);
+    }
+  })();
+</script>
+</body>
+</html>
